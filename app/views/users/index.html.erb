@@ -1,0 +1,26 @@
+<% provide(:title, 'All users') %>
+<h1>All users</h1>
+
+<%= will_paginate %>
+
+<ul class="users">
+  <%= render @users %>
+</ul>
+
+<!-- equivalent to 
+
+<ul class="users">
+  <% @users.each do |user| %>
+    <%= render user %>
+    <!-- equivalent to
+    <li>
+      <%= gravatar_for user, size: 50 %>
+      <%= link_to user.name, user %>
+    </li>
+  <% end %>
+</ul>
+
+-->
+
+<%= will_paginate %>
+<!-- looks for a @users object, and displays pagination links to access other pages >
