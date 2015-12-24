@@ -21,3 +21,12 @@ User.create!(name:  "Example User",
                password:              password,
                password_confirmation: password)
 end
+
+users = User.order(:created_at).take(6)
+# give the first six users created in the test database
+50.times do
+  content = Faker::Lorem.sentence(5)
+  users.each { |user| user.microposts.create!(content: content) }
+end
+
+# reseed database by running rake db:migrate:reset, then rake db:seed

@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   attr_accessor :remember_token
+  has_many :microposts, dependent: :destroy
   before_save { self.email = email.downcase }
   validates :name,  presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
@@ -26,7 +27,7 @@ class User < ActiveRecord::Base
   def remember
     self.remember_token = User.new_token
     #using self allows the 'remember' method to be accessed outside the 
-    #scope of the User class 
+    #scope of the User class -- this method is called in the Sessions controller
     update_attribute(:remember_digest, User.digest(remember_token))
   end
   
@@ -39,5 +40,11 @@ class User < ActiveRecord::Base
   # Forgets a user. 
   def forget
     update_attribute(:remember_digest, nil)
+  end
+  
+  # Defines a proto-feed.
+  # See "Following users" for the full implementation.
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 end
